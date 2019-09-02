@@ -19,9 +19,6 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
-import org.primefaces.model.map.DefaultMapModel;
-import org.primefaces.model.map.MapModel;
-import org.primefaces.model.map.Marker;
 
 @SessionScoped
 @ManagedBean(name = "browserHistory")
@@ -31,19 +28,26 @@ public class browserHistory implements Serializable {
     private EntityManager em;
     @Resource
     private UserTransaction utx;
-    private Usergroup group1 = new Usergroup();
+
     private List<Usergroup> group1List = new ArrayList<Usergroup>();
-    private Audit Audit = new Audit();
+    private Usergroup group1 = new Usergroup();
+
     private List<Audit> AuditList = new ArrayList<Audit>();
-    private Browserhistory Browser = new Browserhistory();
-    private List<Browserhistory> BrowserList = new ArrayList<Browserhistory>();
-    private User user = new User();
-    private List<User> userList = new ArrayList<User>();
-    private Status status = new Status();
-    private List<Status> statusList = new ArrayList<Status>();
     private Audit audit = new Audit();
+
+    private List<Browserhistory> BrowserList = new ArrayList<Browserhistory>();
+    private Browserhistory Browser = new Browserhistory();
+
+    private List<User> userList = new ArrayList<User>();
+    private User user = new User();
+
+    private List<Status> statusList = new ArrayList<Status>();
+    private Status status = new Status();
+
     private String username = new String();
     private String password = new String();
+
+    private Boolean remember = new Boolean(false);
 
     public browserHistory() {
     }
@@ -225,6 +229,81 @@ public class browserHistory implements Serializable {
             context.addMessage("User", success);
         }
         user = new User();
+        return null;
+    }
+
+    public String createUserGroup() {
+        try {
+
+            getUtx().begin();
+            getAudit().setAction("saved group " + group1.getName());
+            getAudit().setCreatedby(1);
+            getAudit().setTimer(new Date());
+            getEm().persist(getAudit());
+            getEm().persist(group1);
+            getUtx().commit();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", group1.getName() + " saved successfully."));
+            setGroup1(new Usergroup());
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", ex.getMessage()));
+        }
+        setGroup1(new Usergroup());
+        return null;
+    }
+
+    public String updateUserGroup() {
+        try {
+
+            Usergroup user2 = getEm().find(Usergroup.class,
+                    group1.getIdgroups());
+            user2.setCreatedAt(new java.util.Date());
+            user2.setCreatedBy(new User(1));
+            user2.setName(group1.getName());
+            user2.setStatusID(new Status(1));
+            user2.setResponsibilities(group1.getResponsibilities());
+
+            getUtx().begin();
+            getAudit().setAction("updated user group " + user.getIdusers());
+            getAudit().setCreatedby(1);
+            getAudit().setTimer(new Date());
+            getEm().persist(getAudit());
+            getEm().merge(user2);
+            getUtx().commit();
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", user.getName() + " Updated successfully."));
+            group1 = new Usergroup();
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Could not update a user."));
+        }
+        group1 = new Usergroup();
+        return null;
+    }
+
+    public String deleteUserGroup(Usergroup user) {
+        try {
+
+            getUtx().begin();
+            getAudit().setAction("Deleted user group");
+            getAudit().setCreatedby(1);
+            getAudit().setTimer(new Date());
+            getEm().persist(getAudit());
+            Usergroup toBeRemoved = (Usergroup) getEm().merge(group1);
+            getEm().remove(toBeRemoved);
+            getUtx().commit();
+            group1 = new Usergroup();
+            FacesMessage success = new FacesMessage(FacesMessage.SEVERITY_ERROR, "UserGroup deleted", "UserGroup deleted");
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage("UserGroup", success);
+
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            FacesMessage success = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage("UserGroup", success);
+        }
+        group1 = new Usergroup();
         return null;
     }
 
@@ -497,6 +576,7 @@ public class browserHistory implements Serializable {
     public void setGroup1List(List<Usergroup> group1List) {
         this.group1List = group1List;
     }
+
     public Browserhistory getBrowser() {
         return Browser;
     }
@@ -507,10 +587,12 @@ public class browserHistory implements Serializable {
     public void setBrowser(Browserhistory Browser) {
         this.Browser = Browser;
     }
+
     /**
      * @return the BrowserList
      */
     public List<Browserhistory> getBrowserList() {
+        BrowserList = em.createQuery("select b from Browserhistory b").getResultList();
         return BrowserList;
     }
 
@@ -519,6 +601,20 @@ public class browserHistory implements Serializable {
      */
     public void setBrowserList(List<Browserhistory> BrowserList) {
         this.BrowserList = BrowserList;
+    }
+
+    /**
+     * @return the remember
+     */
+    public Boolean getRemember() {
+        return remember;
+    }
+
+    /**
+     * @param remember the remember to set
+     */
+    public void setRemember(Boolean remember) {
+        this.remember = remember;
     }
 
 }

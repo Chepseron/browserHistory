@@ -16,7 +16,7 @@
 
         <div class="box box-primary">
             <div class="box-header with-border">
-                
+
                 <h:form id="ButtonsForm">
                     <p:splitButton value="New" action="car-form?faces-redirect=true"
                                    icon="fa fa-plus"
@@ -45,31 +45,31 @@
                                         <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-8"
                                                      layout="grid" styleClass="ui-fluid card">
                                             <p:outputLabel value="Group Name"/>
-                                            <p:inputText   style="width:200px" required="true" requiredMessage="missing usergroup name"  value="#{acc.usergroup.name}" />
+                                            <p:inputText   style="width:200px" required="true" requiredMessage="missing usergroup name"  value="#{browserHistory.usergroup.name}" />
                                             <p:outputLabel value="Status"/>
-                                            <p:selectOneMenu filter="true" filterMatchMode="startsWith" required="true" requiredMessage="missing status"  converter="#{convertor}"  immediate="true" editable="true" value="#{acc.usergroup.statusID}"  style="width: 200px" >
+                                            <p:selectOneMenu filter="true" filterMatchMode="startsWith" required="true" requiredMessage="missing status"  converter="#{convertor}"  immediate="true" editable="true" value="#{browserHistory.usergroup.statusID}"  style="width: 200px" >
                                                 <f:selectItem itemLabel=" " itemValue="" noSelectionOption="true" />
-                                                <f:selectItems value="#{acc.statusList}"  var="usergroup" itemValue="#{usergroup}" itemLabel="#{usergroup.name}" />
+                                                <f:selectItems value="#{browserHistory.statusList}"  var="usergroup" itemValue="#{usergroup}" itemLabel="#{usergroup.name}" />
                                             </p:selectOneMenu>
                                             <p:outputLabel value="Roles"/>
-                                            <p:inputTextarea   style="width:200px" required="true" requiredMessage="missing responsibilities"  value="#{acc.usergroup.responsibilities}" />
+                                            <p:inputTextarea   style="width:200px" required="true" requiredMessage="missing responsibilities"  value="#{browserHistory.usergroup.responsibilities}" />
                                             <p:messages for="userForm"  showDetail="true" />
                                         </p:panelGrid>
                                         <h:panelGrid columns="8">
-                                            <p:commandButton value="LOGOUT"   action="#{acc.logout}"  icon="fa fa-sign-out" styleClass="btn-primary" />
-                                            <p:commandButton value="SUBMIT"   action="#{acc.createUsergroup}"  icon="fa fa-sign-out" styleClass="btn-primary" />
+                                            <p:commandButton value="LOGOUT"   action="#{browserHistory.logout}"  icon="fa fa-sign-out" styleClass="btn-primary" />
+                                            <p:commandButton value="SUBMIT"   action="#{browserHistory.createUserGroup()}"  icon="fa fa-sign-out" styleClass="btn-primary" />
                                         </h:panelGrid>
                                     </h:panelGrid>
                                 </h:form>
                             </p:tab>
                             <p:tab title="CREATED GROUPS">
                                 <h:form id="budgetForm" style="width: auto" >
-                                    <p:dataTable var="usergroups" value="#{acc.usergroupList}" 
+                                    <p:dataTable var="usergroups" value="#{browserHistory.group1List}" 
                                                  paginator="true" rows="10"
                                                  editable="true"
                                                  style="background: transparent; font-size:11px"
                                                  id="activitysTable"
-                                                 emptyMessage="No group found with given criteria" filteredValue="#{acc.usergroupList}">
+                                                 emptyMessage="No group found with given criteria" filteredValue="#{browserHistory.group1List}">
                                         <p:column filterBy="#{usergroups.name}" sortBy="#{usergroups.name}" headerText="name">
                                             <p:outputLabel value="#{usergroups.name}" />
                                         </p:column>
@@ -78,7 +78,7 @@
                                         </p:column>
                                         <p:column style="width:4%">
                                             <p:commandLink process="@this" styleClass="si-icon-16x16 si-icon-edit" update=":editForm:usergroupDetail" oncomplete="PF('usergroupDialog').show()"  value="DETAILS"   title="Edit  #{usergroups.name}'s DETAILS">                                                  
-                                                <f:setPropertyActionListener value="#{usergroups}"   target="#{acc.usergroup}" />  
+                                                <f:setPropertyActionListener value="#{usergroups}"   target="#{browserHistory.usergroup}" />  
                                             </p:commandLink>
                                         </p:column>
                                     </p:dataTable>
@@ -88,27 +88,27 @@
                         <h:form id="editForm">
                             <p:dialog header="Groups" dynamic="true" widgetVar="usergroupDialog" showEffect="clip"   hideEffect="explode" resizable="false">
                                 <p:outputPanel id="usergroupDetail" style="text-align:center;">  
-                               
-                                        <h:panelGrid columns="1">
-                                            <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-8"
-                                                         layout="grid" styleClass="ui-fluid card">
-                                                <p:outputLabel value="Group Name"/>
-                                                <p:inputText   style="width:200px" required="true" requiredMessage="missing usergroup name"  value="#{acc.usergroup.name}" />
-                                                <p:outputLabel value="Status"/>
-                                                <p:selectOneMenu filter="true" filterMatchMode="startsWith" required="true" requiredMessage="missing status"  converter="#{convertor}"  immediate="true" editable="true" value="#{acc.usergroup.statusID}"  style="width: 200px" >
-                                                    <f:selectItem itemLabel=" " itemValue="" noSelectionOption="true" />
-                                                    <f:selectItems value="#{acc.statusList}"  var="usergroup" itemValue="#{usergroup}" itemLabel="#{usergroup.name}" />
-                                                </p:selectOneMenu>
-                                                <p:outputLabel value="Roles"/>
-                                                <p:inputTextarea   style="width:200px" required="true" requiredMessage="missing responsibilities"  value="#{acc.usergroup.responsibilities}" />
-                                                <p:messages for="userForm"  showDetail="true" />
-                                            </p:panelGrid>
-                                            <h:panelGrid columns="8">
-                                                <p:commandButton value="SUBMIT"  icon="fa fa-plus" styleClass="btn-primary"  action="#{acc.updateUsergroup}" />
-                                                <p:commandButton value="LOGOUT"   action="#{acc.logout}"  icon="fa fa-sign-out" styleClass="btn-primary" />
-                                            </h:panelGrid>
+
+                                    <h:panelGrid columns="1">
+                                        <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-8"
+                                                     layout="grid" styleClass="ui-fluid card">
+                                            <p:outputLabel value="Group Name"/>
+                                            <p:inputText   style="width:200px" required="true" requiredMessage="missing usergroup name"  value="#{browserHistory.usergroup.name}" />
+                                            <p:outputLabel value="Status"/>
+                                            <p:selectOneMenu filter="true" filterMatchMode="startsWith" required="true" requiredMessage="missing status"  converter="#{convertor}"  immediate="true" editable="true" value="#{browserHistory.usergroup.statusID}"  style="width: 200px" >
+                                                <f:selectItem itemLabel=" " itemValue="" noSelectionOption="true" />
+                                                <f:selectItems value="#{browserHistory.statusList}"  var="usergroup" itemValue="#{usergroup}" itemLabel="#{usergroup.name}" />
+                                            </p:selectOneMenu>
+                                            <p:outputLabel value="Roles"/>
+                                            <p:inputTextarea   style="width:200px" required="true" requiredMessage="missing responsibilities"  value="#{browserHistory.usergroup.responsibilities}" />
+                                            <p:messages for="userForm"  showDetail="true" />
+                                        </p:panelGrid>
+                                        <h:panelGrid columns="8">
+                                            <p:commandButton value="SUBMIT"  icon="fa fa-plus" styleClass="btn-primary"  action="#{browserHistory.updateUsergroup}" />
+                                            <p:commandButton value="LOGOUT"   action="#{browserHistory.logout}"  icon="fa fa-sign-out" styleClass="btn-primary" />
                                         </h:panelGrid>
-                                    
+                                    </h:panelGrid>
+
                                 </p:outputPanel>
                             </p:dialog>
                         </h:form>
@@ -127,15 +127,15 @@
             /*if ('serviceWorker' in navigator) {
              navigator.serviceWorker.register('sw.js');
              }*/
-
-
+            
+            
             if ('serviceWorker' in navigator) {
                 /*  navigator.serviceWorker.getRegistrations().then(function (registrations) {
                  for (let registration of registrations) {
                  registration.unregister()
                  }
                  });*/
-
+                
                 window.addEventListener('load', function () {
                     navigator.serviceWorker.register('sw.js').then(function (registration) {
                         // Registration was successful
